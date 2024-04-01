@@ -4,9 +4,11 @@
 
 WebSocketsServer webSocket = WebSocketsServer(81);
 
+
+
 // Replace with your network credentials
-const char* ssid = "Websocket";
-const char* password = "12345678";
+const char* ssid = "Mel's Kitchen";
+const char* password = "19584706";
 
 void hexdump(const void* mem, uint32_t len, uint8_t cols = 16) {
   const uint8_t* src = (const uint8_t*)mem;
@@ -62,6 +64,9 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t length)
   }
 }
 
+const int HOR_PIN = 14;
+const int VER_PIN = 12;
+const int BTN_PIN = 27;
 
 
 void setup() {
@@ -96,9 +101,8 @@ void setup() {
 unsigned long timer = 0;
 int counter = 0;
 
-const int HOR_PIN = 32;
-const int VER_PIN = 35;
-const int BTN_PIN = 34;
+
+
 
 void loop() {
   webSocket.loop();
