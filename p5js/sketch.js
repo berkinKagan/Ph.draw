@@ -1,5 +1,5 @@
 // where the serial server is (your local machine):
-var host = '172.20.10.9:81';
+var host = '172.16.18.171:81';
 var socket; // the websocket
 var sensorValue = 0; // the sensor value
 var c= "black";
