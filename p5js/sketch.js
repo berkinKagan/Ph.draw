@@ -16,14 +16,14 @@ var yellowBut = document.getElementById("yellow");
 var blackBut = document.getElementById("black");
 var rubberBut = document.getElementById("rubber");
 var strokeVal = 3;
-let cursorLayer;
 
+let cursorLayer;
 
 function setup() {
   
   createCanvas(windowWidth, windowHeight);
   noCursor();
-  noStroke();
+  //noStroke();
 
   cursorLayer = createGraphics(windowWidth, windowHeight);
 
@@ -36,58 +36,38 @@ function setup() {
   slider.style('width', '180px');
 
   
- 
-
-  
   socket = new WebSocket('ws://' + host);
-  
   socket.onopen = sendIntro;
-  
   socket.onmessage = readMessage;
 }
 
 function drawCursor(x, y) {
   // Draw a red circle as the custom cursor
-  fill(255, 0, 0);
-  noStroke();
-  ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  
+    fill(c);
+    //noStroke();
+    ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
 }
 
 function draw() {
-  
-  //background("#F0F8FF")
+  background("#F0F8FF");
+  image(cursorLayer, 0 , 0);
 
-  cursorLayer.clear();
-
-  
-  if(initial){
-    xCor = width/2;
-    yCor = height/2;
-    initial = false;
-  }
-
-  drawCursor(xCor, yCor);
-  //console.log(mouseX,mouseY);
-  
+  drawCursor(mouseX, mouseY);
 
   if (mouseIsPressed) {
     
     if (c == "#F0F8FF") {
-      strokeWeight(slider.value());
+      cursorLayer.strokeWeight(slider.value());
     } else {
       
-      strokeWeight(slider.value());
+      cursorLayer.strokeWeight(slider.value());
     }
-    stroke(c); 
-    line(pmouseX, pmouseY, mouseX, mouseY); 
+
+    cursorLayer.stroke(c); 
+    cursorLayer.line(mouseX/2, mouseY/2, pmouseX/2, pmouseY/2); 
   }
 
-  image(cursorLayer, 0 , 0);
-  
 }
 
 
