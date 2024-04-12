@@ -8,6 +8,7 @@ var yCor;
 
 var indEll;
 var initial = true;
+var joyStickInitial = true;
 var blueBut = document.getElementById("blue");
 var greenBut = document.getElementById("green");
 var redBut = document.getElementById("red");
@@ -47,12 +48,9 @@ function setup() {
 
 function drawCursor(x, y) {
   // Draw a red circle as the custom cursor
-  
-    cursorLayer.fill(c);
-    noStroke();
-    cursorLayer.ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
-  
-  
+  fill(255, 0, 0);
+  noStroke();
+  ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
 }
 
 function windowResized() {
@@ -61,16 +59,19 @@ function windowResized() {
 
 function draw() {
   
+  //background("#F0F8FF")
+
   cursorLayer.clear();
 
   
   if(initial){
-    mouseX = width/2;
-    mouseY = height/2;
-    initial = false
+    xCor = width/2;
+    yCor = height/2;
+    initial = false;
   }
 
-  drawCursor(mouseX, mouseY);
+  drawCursor(xCor, yCor);
+  //console.log(mouseX,mouseY);
   
 
   if (mouseIsPressed) {
@@ -123,16 +124,27 @@ function readMessage(event) {
 
   const coorArr = sensorValue.split(", ");
 
-  xCor = coorArr[1];
-  yCor = coorArr[2];
+  
 
-  xCor = xCor/3;
-  yCor = yCor/2;
+  if(joyStickInitial){
+    xCor = width/2;
+    yCor = height/2;
+    joyStickInitial = false;
+  }
+
+  if(coorArr[1] < 1800){xCor++;}
+  else if(coorArr[1] > 2200){xCor--;}
+
+  if(coorArr[2] < 1800){yCor--;}
+  else if(coorArr[2] > 2200){yCor++;}
+
+
+  
 
   console.log(xCor, yCor);
 
-  console.log(windowHeight, windowWidth);
+  //console.log(windowHeight, windowWidth);
 
-  //println(sensorValue); // print it
+  println(sensorValue); // print it
 }
 
