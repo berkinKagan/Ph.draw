@@ -5,6 +5,8 @@ var sensorValue = 0; // the sensor value
 var c= "black";
 var xCor;
 var yCor;
+var prevXCor;
+var prevYCor;
 
 var indEll;
 var initial = true;
@@ -53,9 +55,9 @@ function draw() {
   background("#F0F8FF");
   image(cursorLayer, 0 , 0);
 
-  drawCursor(mouseX, mouseY);
+  drawCursor(xCor, yCor);
 
-  if (mouseIsPressed) {
+  if (!mouseIsPressed) {
     
     if (c == "#F0F8FF") {
       cursorLayer.strokeWeight(slider.value());
@@ -65,7 +67,7 @@ function draw() {
     }
 
     cursorLayer.stroke(c); 
-    cursorLayer.line(mouseX/2, mouseY/2, pmouseX/2, pmouseY/2); 
+    cursorLayer.line(xCor/2, yCor/2, prevXCor/2, prevYCor/2); 
   }
 
 }
@@ -111,6 +113,9 @@ function readMessage(event) {
     yCor = height/2;
     joyStickInitial = false;
   }
+
+  prevXCor = xCor;
+  prevYCor = yCor;
 
   if(coorArr[1] < 1800){xCor++;}
   else if(coorArr[1] > 2200){xCor--;}
