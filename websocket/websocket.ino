@@ -5,7 +5,11 @@
 #include <WebSocketsServer.h>
 
 
-
+const int HOR_PIN = 32;
+const int VER_PIN = 33;
+const int BTN_PIN = 35;
+const int BUTTON = 25;
+const int COLOR_BUTTON = 26;
 
 
 WebSocketsServer webSocket = WebSocketsServer(81);
@@ -14,9 +18,9 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 
 // Replace with your network credentials
 
-const char* ssid = "Peepo";
+const char* ssid = "Websocket";
 
-const char* password = "hkjs9171";
+const char* password = "12345678";
 
 
 
@@ -133,7 +137,8 @@ void setup() {
   Serial.begin(9600);
 
 
-
+  pinMode(BUTTON, INPUT_PULLUP);
+  pinMode(COLOR_BUTTON, INPUT_PULLUP);
   // Connect to Wi-Fi network with SSID and password
 
   Serial.print("Connecting to ");
@@ -180,9 +185,7 @@ unsigned long timer = 0;
 
 int counter = 0;
 
-const int HOR_PIN = 32;
-const int VER_PIN = 33;
-const int BTN_PIN = 35;
+
 
 void loop() {
 
@@ -207,6 +210,7 @@ void loop() {
                 String(analogRead(HOR_PIN));
 
   //Serial.println(message);
+  Serial.println(digitalRead(COLOR_BUTTON));
   webSocket.broadcastTXT(message);
 
 
