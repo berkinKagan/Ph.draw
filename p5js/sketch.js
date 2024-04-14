@@ -132,11 +132,11 @@ function readMessage(event) {
     prevXCor = xCor;
     prevYCor = yCor;
   
-    if(coorArr[1] < 1800){xCor++;}
-    else if(coorArr[1] > 2200){xCor--;}
-  
-    if(coorArr[2] < 1800){yCor--;}
-    else if(coorArr[2] > 2200){yCor++;}
+    if (Math.abs(coorArr[1] - 2000) > 200)
+      xCor += mapJoystickInput(coorArr[1]);
+
+    if (Math.abs(coorArr[2] - 2000) > 200)
+      yCor -= mapJoystickInput(coorArr[2]);
   }
 
   console.log(xCor, yCor);
@@ -146,3 +146,6 @@ function readMessage(event) {
   println(sensorValue); // print it
 }
 
+function mapJoystickInput(input) {
+  return -1 + (2 * input) / 4095;
+}
