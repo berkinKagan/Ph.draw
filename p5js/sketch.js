@@ -1,8 +1,12 @@
 // where the serial server is (your local machine):
-var host = '192.168.25.1:81';
+var host = '192.168.246.1:81';
 var socket; // the websocket
 var sensorValue = 0; // the sensor value
-var c= "black";
+
+var c = "black";
+var allColors = ["blue", "green", "red", "yellow", "black", "#F0F8FF"];
+var cIndex = 4;
+
 var xCor;
 var yCor;
 var prevXCor;
@@ -18,14 +22,15 @@ var yellowBut = document.getElementById("yellow");
 var blackBut = document.getElementById("black");
 var rubberBut = document.getElementById("rubber");
 var strokeVal = 3;
-
 let cursorLayer;
+
+var drawEnabled = true;
 
 function setup() {
   
   createCanvas(windowWidth, windowHeight);
   noCursor();
-  //noStroke();
+  noStroke();
 
   cursorLayer = createGraphics(windowWidth, windowHeight);
 
@@ -37,27 +42,30 @@ function setup() {
   slider.position(1040, 100);
   slider.style('width', '180px');
 
-  
   socket = new WebSocket('ws://' + host);
+  
   socket.onopen = sendIntro;
+  
   socket.onmessage = readMessage;
 }
 
 function drawCursor(x, y) {
   // Draw a red circle as the custom cursor
-  
-    fill(c);
-    //noStroke();
-    ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
+  fill(255, 0, 0);
+  noStroke();
+  ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-  background("#F0F8FF");
+  background("#F0F8FF")
   image(cursorLayer, 0 , 0);
-
   drawCursor(xCor, yCor);
 
-  if (!mouseIsPressed) {
+  if (drawEnabled) {
     
     if (c == "#F0F8FF") {
       cursorLayer.strokeWeight(slider.value());
@@ -68,8 +76,7 @@ function draw() {
 
     cursorLayer.stroke(c); 
     cursorLayer.line(xCor/2, yCor/2, prevXCor/2, prevYCor/2); 
-  }
-
+  }  
 }
 
 
@@ -93,7 +100,10 @@ function rubberPress(){
   c = "#F0F8FF";
 }
 
-
+function changeColor() {
+  cIndex = (cIndex + 1) % allColors.length;
+  c = allColors[cIndex];
+}
 
 function sendIntro() {
   // convert the message object to a string and send it:
@@ -104,27 +114,30 @@ function readMessage(event) {
   var msg = event.data; // read data from the onmessage event
   sensorValue = msg;
 
-  const coorArr = sensorValue.split(", ");
+  const coorArr = sensorValue.split(",");
 
-  
-
-  if(joyStickInitial){
-    xCor = width/2;
-    yCor = height/2;
-    joyStickInitial = false;
+  if (coorArr[0] == 2) {
+    drawEnabled = !drawEnabled;
   }
-
-  prevXCor = xCor;
-  prevYCor = yCor;
-
-  if(coorArr[1] < 1800){xCor++;}
-  else if(coorArr[1] > 2200){xCor--;}
-
-  if(coorArr[2] < 1800){yCor--;}
-  else if(coorArr[2] > 2200){yCor++;}
-
-
+  else if (coorArr[0] == 3) {
+    changeColor();
+  }
+  else {
+    if(joyStickInitial){
+      xCor = width/2;
+      yCor = height/2;
+      joyStickInitial = false;
+    }
   
+    prevXCor = xCor;
+    prevYCor = yCor;
+  
+    if(coorArr[1] < 1800){xCor++;}
+    else if(coorArr[1] > 2200){xCor--;}
+  
+    if(coorArr[2] < 1800){yCor--;}
+    else if(coorArr[2] > 2200){yCor++;}
+  }
 
   console.log(xCor, yCor);
 
