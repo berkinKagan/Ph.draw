@@ -201,20 +201,27 @@ void loop() {
     timer = millis();
   }
 
-  String message = String(digitalRead(BTN_PIN)) + ", " +
-                String(analogRead(VER_PIN)) + ", " +
+  bool drawBtnPressed = drawBtn->update();
+
+  bool colorBtnPressed = colorBtn->update();
+
+  if(drawBtnPressed){
+    webSocket.broadcastTXT("2");
+  }
+
+  if(colorBtnPressed){
+    webSocket.broadcastTXT("3");
+  }
+
+  String message =String(digitalRead(BTN_PIN)) + "," +
+                String(analogRead(VER_PIN)) + "," +
                 String(analogRead(HOR_PIN));
 
   //Serial.println(message);
   //Serial.println(digitalRead(COLOR_BUTTON));
   webSocket.broadcastTXT(message);
 
-  bool drawBtnPressed = drawBtn->update();
-  if (drawBtnPressed)
-    Serial.println("draw button");
-
-  bool colorBtnPressed = colorBtn->update();
-  if (colorBtnPressed)
-    Serial.println("draw button");
+ 
+  
     
 }

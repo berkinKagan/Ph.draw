@@ -23,9 +23,9 @@ bool Button::update() {
 
     // if the button state has changed:
     if (reading != state) {
-      state = reading;
+      state = lastState = reading;
       
-      return true;
+      return state==1;
     }
   }
 
