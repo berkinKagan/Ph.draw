@@ -5,6 +5,7 @@ var sensorValue = 0; // the sensor value
 
 var c = "black";
 var allColors = ["blue", "green", "red", "yellow", "black", "#F0F8FF"];
+var buttonList = [blueBut, greenBut, redBut, yellowBut, blackBut, rubberBut];
 var cIndex = 4;
 
 var xCor;
@@ -83,26 +84,33 @@ function draw() {
 
 function bluePress(){
   c = "blue";
+  blueBut.style.backgroundColor = "blue";
 }
 function greenPress(){
   c = "green";
+  greenBut.style.backgroundColor = "green";
 }
 function redPress(){
   c = "red";
+  redBut.style.backgroundColor = "red";
 }
 function yellowPress(){
   c = "yellow";
+  yellowBut.style.backgroundColor = "yellow";
 }
 function blackPress(){
   c = "black";
+  blackBut.style.backgroundColor = "black";
 }
 function rubberPress(){
   c = "#F0F8FF";
+  rubberBut.style.backgroundColor = "black";
 }
 
 function changeColor() {
   cIndex = (cIndex + 1) % allColors.length;
   c = allColors[cIndex];
+  buttonList[cIndex].style.background = c;
 }
 
 function sendIntro() {
