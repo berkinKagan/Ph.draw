@@ -1,15 +1,17 @@
 // Load Wi-Fi library
 
 #include <WiFi.h>
-
 #include <WebSocketsServer.h>
-
+#include "Button.h"
 
 const int HOR_PIN = 32;
 const int VER_PIN = 33;
 const int BTN_PIN = 35;
 const int BUTTON = 25;
 const int COLOR_BUTTON = 26;
+
+Button* drawBtn;
+Button* colorBtn;
 
 
 WebSocketsServer webSocket = WebSocketsServer(81);
@@ -136,9 +138,10 @@ void setup() {
 
   Serial.begin(9600);
 
-
-  pinMode(BUTTON, INPUT_PULLUP);
-  pinMode(COLOR_BUTTON, INPUT_PULLUP);
+  drawBtn = new Button(BUTTON);
+  colorBtn = new Button(COLOR_BUTTON);
+  //pinMode(BUTTON, INPUT_PULLUP);
+  //pinMode(COLOR_BUTTON, INPUT_PULLUP);
   // Connect to Wi-Fi network with SSID and password
 
   Serial.print("Connecting to ");
@@ -186,23 +189,16 @@ unsigned long timer = 0;
 int counter = 0;
 
 
-
 void loop() {
 
   webSocket.loop();
 
   if (millis() - timer > 2000) // send a counter value every 2 sec.
-
   {
-
     String numberString = String(counter);
-
     webSocket.broadcastTXT(numberString);
-
     counter = counter + 1;
-
     timer = millis();
-
   }
 
   String message = String(digitalRead(BTN_PIN)) + ", " +
@@ -210,9 +206,15 @@ void loop() {
                 String(analogRead(HOR_PIN));
 
   //Serial.println(message);
-  Serial.println(digitalRead(COLOR_BUTTON));
+  //Serial.println(digitalRead(COLOR_BUTTON));
   webSocket.broadcastTXT(message);
 
+  bool drawBtnPressed = drawBtn->update();
+  if (drawBtnPressed)
+    Serial.println("draw button");
 
-
+  bool colorBtnPressed = colorBtn->update();
+  if (colorBtnPressed)
+    Serial.println("draw button");
+    
 }
