@@ -4,8 +4,8 @@ var socket; // the websocket
 var sensorValue = 0; // the sensor value
 
 var c = "black";
-var allColors = ["blue", "green", "red", "yellow", "black", "#F0F8FF"];
-var buttonList = [blueBut, greenBut, redBut, yellowBut, blackBut, rubberBut];
+var allColors = ["blue", "green", "red", "yellow", "black", "black"];
+
 var cIndex = 4;
 
 var xCor;
@@ -22,6 +22,7 @@ var redBut = document.getElementById("red");
 var yellowBut = document.getElementById("yellow");
 var blackBut = document.getElementById("black");
 var rubberBut = document.getElementById("rubber");
+var buttonList = [blueBut, greenBut, redBut, yellowBut, blackBut, rubberBut];
 var strokeVal = 3;
 let cursorLayer;
 
@@ -110,7 +111,16 @@ function rubberPress(){
 function changeColor() {
   cIndex = (cIndex + 1) % allColors.length;
   c = allColors[cIndex];
-  buttonList[cIndex].style.background = c;
+  var btnn = buttonList[cIndex];
+  btnn.style.backgroundColor = c;
+  btnn.style.color = "white";
+  
+  for(var i = 0; i < buttonList.length; i++){
+    if(i != cIndex){
+      buttonList[i].style.color = allColors[i];
+      buttonList[i].style.backgroundColor = "white"; 
+    }
+  }
 }
 
 function sendIntro() {
@@ -121,6 +131,8 @@ function sendIntro() {
 function readMessage(event) {
   var msg = event.data; // read data from the onmessage event
   sensorValue = msg;
+
+  
 
   const coorArr = sensorValue.split(",");
 
