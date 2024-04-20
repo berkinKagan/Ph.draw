@@ -20,9 +20,9 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 
 // Replace with your network credentials
 
-const char* ssid = "Websocket";
+const char* ssid = "Peepo";
 
-const char* password = "12345678";
+const char* password = "hkjs9171";
 
 
 

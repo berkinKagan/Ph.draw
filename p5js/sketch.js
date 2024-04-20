@@ -1,10 +1,10 @@
 // where the serial server is (your local machine):
-var host = '192.168.246.1:81';
+var host = '192.168.25.1:81';
 var socket; // the websocket
 var sensorValue = 0; // the sensor value
 
 var c = "black";
-var allColors = ["blue", "green", "red", "yellow", "black", "black"];
+var allColors = ["blue", "green", "red", "yellow", "black", "#F0F8FF","thickness"];
 
 var cIndex = 4;
 
@@ -114,6 +114,9 @@ function changeColor() {
   var btnn = buttonList[cIndex];
   btnn.style.backgroundColor = c;
   btnn.style.color = "white";
+
+  //if c == "thickness" -> drawEnabled = !drawEnabled
+  // thicknessMode = true
   
   for(var i = 0; i < buttonList.length; i++){
     if(i != cIndex){
@@ -135,6 +138,8 @@ function readMessage(event) {
   
 
   const coorArr = sensorValue.split(",");
+
+  //if thicknessMode == True
 
   if (coorArr[0] == 2) {
     drawEnabled = !drawEnabled;
@@ -164,6 +169,7 @@ function readMessage(event) {
   //console.log(windowHeight, windowWidth);
 
   println(sensorValue); // print it
+  
 }
 
 function mapJoystickInput(input) {
