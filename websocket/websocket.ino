@@ -14,8 +14,8 @@ Button* colorBtn;
 
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-const char* ssid = "Peepo";
-const char* password = "hkjs9171";
+const char* ssid = "Websocket";
+const char* password = "12345678";
 
 void hexdump(const void *mem, uint32_t len, uint8_t cols = 16) {
   const uint8_t* src = (const uint8_t*) mem;
