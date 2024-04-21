@@ -29,7 +29,6 @@ let cursorLayer;
 var drawEnabled = true;
 
 function setup() {
-  
   createCanvas(windowWidth, windowHeight);
   noCursor();
   noStroke();
@@ -45,17 +44,14 @@ function setup() {
   slider.style('width', '180px');
 
   socket = new WebSocket('ws://' + host);
-  
   socket.onopen = sendIntro;
-  
   socket.onmessage = readMessage;
 }
 
 function drawCursor(x, y) {
-  // Draw a red circle as the custom cursor
   fill(255, 0, 0);
   noStroke();
-  ellipse(x, y, 20, 20); // Adjust the size of the cursor as needed
+  ellipse(x, y, 20, 20);
 }
 
 function windowResized() {
@@ -68,42 +64,38 @@ function draw() {
   drawCursor(xCor, yCor);
 
   if (drawEnabled) {
-    
-    if (c == "#F0F8FF") {
-      cursorLayer.strokeWeight(slider.value());
-    } else {
-      
-      cursorLayer.strokeWeight(slider.value());
-    }
-
+    cursorLayer.strokeWeight(slider.value());
     cursorLayer.stroke(c); 
     cursorLayer.line(xCor/2, yCor/2, prevXCor/2, prevYCor/2); 
   }  
 }
 
-
-
-function bluePress(){
+function bluePress() {
   c = "blue";
   blueBut.style.backgroundColor = "blue";
 }
-function greenPress(){
+
+function greenPress() {
   c = "green";
   greenBut.style.backgroundColor = "green";
 }
-function redPress(){
+
+function redPress() {
   c = "red";
   redBut.style.backgroundColor = "red";
 }
-function yellowPress(){
+
+function yellowPress() {
   c = "yellow";
   yellowBut.style.backgroundColor = "yellow";
 }
-function blackPress(){
+
+function blackPress() {
   c = "black";
   blackBut.style.backgroundColor = "black";
 }
-function rubberPress(){
+
+function rubberPress() {
   c = "#F0F8FF";
   rubberBut.style.backgroundColor = "black";
 }
@@ -134,8 +126,6 @@ function sendIntro() {
 function readMessage(event) {
   var msg = event.data; // read data from the onmessage event
   sensorValue = msg;
-
-  
 
   const coorArr = sensorValue.split(",");
 
