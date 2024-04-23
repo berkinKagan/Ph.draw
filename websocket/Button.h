@@ -1,5 +1,5 @@
-#ifndef LED_FUNCTIONS_H
-#define LED_FUNCTIONS_H
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include <Arduino.h>
 

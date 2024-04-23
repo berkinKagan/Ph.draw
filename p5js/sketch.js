@@ -1,5 +1,5 @@
 // where the serial server is (your local machine):
-var host = '192.168.25.153:81';
+var host = '192.168.204.1:81';
 var socket; // the websocket
 var sensorValue = 0; // the sensor value
  
@@ -24,11 +24,14 @@ var redBut = document.getElementById("red");
 var yellowBut = document.getElementById("yellow");
 var blackBut = document.getElementById("black");
 var rubberBut = document.getElementById("rubber");
-var buttonList = [blueBut, greenBut, redBut, yellowBut, blackBut, rubberBut];
+var uiOptionsList = [blueBut, greenBut, redBut, yellowBut, blackBut, rubberBut, "thickness"];
 var strokeVal = 3;
 let cursorLayer;
  
 var drawEnabled = true;
+
+const switchButtonInput = 3;
+const drawButtonInput = 2;
  
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -46,7 +49,6 @@ function setup() {
   slider.style('width', '180px');
  
   socket = new WebSocket('ws://' + host);
-  socket.onopen = sendIntro;
   socket.onmessage = readMessage;
 }
  
@@ -103,64 +105,57 @@ function rubberPress() {
 }
  
 function changeColor() {
-  cIndex = (cIndex + 1) % allColors.length;
   c = allColors[cIndex];
-  var btnn = buttonList[cIndex];
+  var btnn = uiOptionsList[cIndex];
   btnn.style.backgroundColor = c;
   btnn.style.color = "white";
   
-  for(var i = 0; i < buttonList.length; i++){
+  for(var i = 0; i < allColors.length; i++){
     if(i != cIndex){
-      buttonList[i].style.color = allColors[i];
-      buttonList[i].style.backgroundColor = "white"; 
+      uiOptionsList[i].style.color = allColors[i];
+      uiOptionsList[i].style.backgroundColor = "white"; 
     }
   }
 }
  
-function sendIntro() {
-  // convert the message object to a string and send it:
-  socket.send("Hello");
-}
- 
 function readMessage(event) {
   var msg = event.data; // read data from the onmessage event
-  sensorValue = msg;
  
-  const coorArr = sensorValue.split(",");
+  const coorArr = msg.split(",");
  
-  if (coorArr[0] == 2) {
+  if (coorArr[0] == drawButtonInput) {
     drawEnabled = !drawEnabled;
-    thicknessMode = !thicknessMode; // Toggle thickness mode
   }
-  else if (coorArr[0] == 3) {
-    changeColor();
+  else if (coorArr[0] == switchButtonInput) {
+    handleColorAndThicknessSwitch();
   }
   else {
     if (thicknessMode) {
       handleThicknessMode(coorArr);
     } else {
-      handleRegularMode(coorArr);
+      handleDrawingMode(coorArr);
     }
   }
 }
  
- 
+function handleColorAndThicknessSwitch() {
+  cIndex = (cIndex + 1) % uiOptionsList.length;
+
+  thicknessMode = cIndex == uiOptionsList.length - 1;
+
+  if (!thicknessMode)
+    changeColor();
+} 
+
 function handleThicknessMode(coorArr) {
   if (Math.abs(coorArr[1] - 2000) > 200) {
-    // If there is significant joystick movement along the x-axis
-    var deltaX = mapJoystickInput(coorArr[1]); // Calculate the change in x-coordinate based on joystick input
-    xCor += deltaX; // Update the x-coordinate based on joystick input
+    var deltaX = mapJoystickInput(coorArr[1]);
     
-    // Increment or decrement slider value based on joystick input
-    if (deltaX > 0) {
-      slider.value(slider.value() + 1); // Increment the slider value by one
-    } else if (deltaX < 0 && slider.value() > 1) {
-      slider.value(slider.value() - 1); // Decrement the slider value by one
-    }
+    slider.value(slider.value() + deltaX);
   }
 }
  
-function handleRegularMode(coorArr) {
+function handleDrawingMode(coorArr) {
     if (joyStickInitial) {
       xCor = width/2;
       yCor = height/2;
@@ -173,10 +168,6 @@ function handleRegularMode(coorArr) {
   
     if (Math.abs(coorArr[2] - 2000) > 200)
       yCor -= mapJoystickInput(coorArr[2]);
-  
-  //console.log(xCor, yCor);
-  //console.log(windowHeight, windowWidth);
-  //println(sensorValue); // print it
 }
  
 function mapJoystickInput(input) {
