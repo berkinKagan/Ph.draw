@@ -24,7 +24,7 @@ var blackBut = document.getElementById("black");
 var rubberBut = document.getElementById("rubber");
 var buttonList = [blueBut, greenBut, redBut, yellowBut, blackBut, rubberBut];
 var strokeVal = 3;
-let cursorLayer;
+let sketchLayer;
 
 var drawEnabled = true;
 
@@ -33,7 +33,7 @@ function setup() {
   noCursor();
   noStroke();
 
-  cursorLayer = createGraphics(windowWidth, windowHeight);
+  sketchLayer = createGraphics(windowWidth, windowHeight);
 
   background("#F0F8FF");
 
@@ -60,13 +60,13 @@ function windowResized() {
 
 function draw() {
   background("#F0F8FF")
-  image(cursorLayer, 0 , 0);
+  image(sketchLayer, 0 , 0);
   drawCursor(xCor, yCor);
 
   if (drawEnabled) {
-    cursorLayer.strokeWeight(slider.value());
-    cursorLayer.stroke(c); 
-    cursorLayer.line(xCor/2, yCor/2, prevXCor/2, prevYCor/2); 
+    sketchLayer.strokeWeight(slider.value());
+    sketchLayer.stroke(c); 
+    sketchLayer.line(xCor/2, yCor/2, prevXCor/2, prevYCor/2); 
   }  
 }
 
